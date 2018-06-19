@@ -5,7 +5,7 @@ const send = data =>
     url: process.env.SLACK_WEBHOOK_URL,
     method: 'POST',
     contentType: 'application/json',
-    { data }
+    data
   });
 
 const toMessage = record => {
@@ -38,6 +38,7 @@ const toMessage = record => {
 };
 
 exports.handler = (event, context, callback) => {
-  const messages = event.Records.map(toMessage);
-  Promise.all(messages.map(send)).then(callback(null)).catch(callback);
+  Promise.all(event.Records.map(toMessage).map(send))
+    .then(() => callback(null))
+    .catch(callback);
 }
