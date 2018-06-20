@@ -12,7 +12,7 @@ const toMessage = record => {
   const subject = record.Sns.Subject;
   const message = JSON.parse(record.Sns.Message);
   return {
-    text: subject,
+    text: `<!here> ${subject}`,
     attachments: [{
       text: message.NewStateReason,
       fallback: message.NewStateReason,
