@@ -8,6 +8,12 @@ const send = data =>
     data
   });
 
+const statusColors = {
+  ALARM: 'danger',
+  INSUFFICIENT_DATA: 'warning',
+  OK: 'good',
+};
+
 const toMessage = record => {
   const subject = record.Sns.Subject;
   const message = JSON.parse(record.Sns.Message);
@@ -16,6 +22,7 @@ const toMessage = record => {
     attachments: [{
       text: message.NewStateReason,
       fallback: message.NewStateReason,
+      color: statusColors[message.NewStateValue],
       fields: [{
         title: 'Time',
         value: message.StateChangeTime,
@@ -25,8 +32,8 @@ const toMessage = record => {
         value: message.AlarmName,
         short: true,
       }, {
-        title: 'Account',
-        value: message.AWSAccountId,
+        title: 'Status',
+        value: message.NewStateValue,
         short: true,
       }, {
         title: 'Region',
